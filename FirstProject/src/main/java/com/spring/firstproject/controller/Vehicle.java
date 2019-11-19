@@ -1,6 +1,7 @@
-package com.spring.firstproject.model;
+package com.spring.firstproject.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/check")
 @Component
 public class Vehicle {
-	@Autowired
+	
 	private car car;
 
 	public car getCar() {
