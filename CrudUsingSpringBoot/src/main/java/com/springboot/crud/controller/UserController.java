@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.springboot.crud.configure.JmsProvider;
 import com.springboot.crud.model.User;
+import com.springboot.crud.model.UserDto;
 import com.springboot.crud.service.UserService;
 
 @RestController
@@ -67,10 +68,10 @@ public class UserController {
 	}
 
 	@GetMapping("/login")
-	public String login(HttpServletRequest req) {
+	public String login(@RequestBody UserDto userdto) {
 
-		String email = req.getParameter("email");
-		String password = req.getParameter("password");
+		String email = userdto.getEmail();
+		String password=userdto.getPassword();
 		String status = userService.login(email, password);
 		return status;
 	}
