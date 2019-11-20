@@ -1,5 +1,7 @@
 package com.springboot.crud.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,7 +12,7 @@ import org.springframework.stereotype.Component;
 @Entity
 @Table
 @Component
-public class User {
+public class User implements Serializable {
 	
 	@GeneratedValue
 	@javax.persistence.Id

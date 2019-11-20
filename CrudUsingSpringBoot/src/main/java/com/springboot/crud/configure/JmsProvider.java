@@ -15,8 +15,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class JmsProvider {
-	//@Autowired
-	//private static JavaMailSender javaMailSender;
+	
 	private static JavaMailSender javaMailSender = new JavaMailSenderImpl();
 
 	public static void sendEmail(String toEmail, String subject, String body) {
