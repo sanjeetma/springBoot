@@ -1,13 +1,13 @@
-package com.springboot.crud.service;
+package com.bridgelabz.fundoo.service;
 
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.web.bind.annotation.PathVariable;
 
-import com.springboot.crud.model.User;
+import com.bridgelabz.fundoo.model.User;
 
-public interface UserService {
+public interface IUserService {
 
 	boolean save(User user);
 
@@ -19,7 +19,7 @@ public interface UserService {
 
 	public String login(String email, String password);
 
-	public void parseToken(String token);
+	public String parseToken(String token);
 
 	public void forgetPassword(String email);
 

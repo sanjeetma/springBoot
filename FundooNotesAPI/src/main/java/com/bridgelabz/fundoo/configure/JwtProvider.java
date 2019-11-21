@@ -1,4 +1,4 @@
-package com.springboot.crud.configure;
+package com.bridgelabz.fundoo.configure;
 
 import org.springframework.stereotype.Component;
 

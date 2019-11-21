@@ -1,8 +1,8 @@
-package com.springboot.crud.dao;
+package com.bridgelabz.fundoo.dao;
 
 import org.springframework.data.repository.CrudRepository;
 
-import com.springboot.crud.model.User;
+import com.bridgelabz.fundoo.model.User;
 
 public interface UserDao extends CrudRepository<User, Long> {
 

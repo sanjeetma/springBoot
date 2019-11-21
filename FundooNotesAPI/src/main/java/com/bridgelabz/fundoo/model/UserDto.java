@@ -1,4 +1,4 @@
-package com.springboot.crud.model;
+package com.bridgelabz.fundoo.model;
 
 public class UserDto {
 	private String email;

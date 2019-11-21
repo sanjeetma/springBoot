@@ -1,4 +1,4 @@
-package com.springboot.crud.configure;
+package com.bridgelabz.fundoo.configure;
 import java.util.Properties;
 
 import javax.mail.Authenticator;

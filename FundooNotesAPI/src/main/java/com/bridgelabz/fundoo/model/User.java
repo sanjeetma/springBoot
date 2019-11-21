@@ -1,4 +1,4 @@
-package com.springboot.crud.model;
+package com.bridgelabz.fundoo.model;
 
 import java.io.Serializable;
 
@@ -12,8 +12,12 @@ import org.springframework.stereotype.Component;
 @Entity
 @Table
 @Component
-public class User implements Serializable {
+public class User implements Serializable  {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	@GeneratedValue
 	@javax.persistence.Id
 	private Long Id;
@@ -27,8 +31,14 @@ public class User implements Serializable {
 	private String password;
 	
 	
+	public User(){
+		
+	}	
 	
-	
+	public User(UserDto userdto) {
+		this.email=userdto.getEmail();	
+		this.password=userdto.getPassword();
+	}
 	public String getPassword() {
 		return password;
 	}

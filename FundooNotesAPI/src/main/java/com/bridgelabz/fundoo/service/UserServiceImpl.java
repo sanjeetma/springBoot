@@ -1,4 +1,4 @@
-package com.springboot.crud.service;
+package com.bridgelabz.fundoo.service;
 
 import java.util.List;
 import java.util.Optional;
@@ -7,19 +7,17 @@ import java.util.regex.Pattern;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
 
-import com.springboot.crud.configure.JmsProvider;
-import com.springboot.crud.configure.JwtProvider;
-import com.springboot.crud.dao.UserDao;
-import com.springboot.crud.model.User;
+import com.bridgelabz.fundoo.configure.JmsProvider;
+import com.bridgelabz.fundoo.configure.JwtProvider;
+import com.bridgelabz.fundoo.dao.UserDao;
+import com.bridgelabz.fundoo.model.User;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements IUserService {
 
 	@Autowired
 	private UserDao dao;
@@ -29,7 +27,7 @@ public class UserServiceImpl implements UserService {
 
 	private final Log logger = LogFactory.getLog(getClass());
 
-	private Pattern BCRYPT_PATTERN = Pattern.compile("\\A\\$2(a|y|b)?\\$(\\d\\d)\\$[./0-9A-Za-z]{53}");
+	//private Pattern BCRYPT_PATTERN = Pattern.compile("\\A\\$2(a|y|b)?\\$(\\d\\d)\\$[./0-9A-Za-z]{53}");
 
 	@Autowired
 	JwtProvider jwtProvider;
@@ -38,20 +36,6 @@ public class UserServiceImpl implements UserService {
 
 		return bcryptPassword.encode(plainTextPassword);
 
-	}
-
-	public boolean matches(CharSequence rawPassword, String encodedPassword) {
-		if (encodedPassword == null || encodedPassword.length() == 0) {
-			logger.warn("Empty encoded password");
-			return false;
-		}
-
-		if (!BCRYPT_PATTERN.matcher(encodedPassword).matches()) {
-			logger.warn("Encoded password does not look like BCrypt");
-			return false;
-		}
-
-		return BCrypt.checkpw(rawPassword.toString(), encodedPassword);
 	}
 
 	@Override
@@ -96,21 +80,29 @@ public class UserServiceImpl implements UserService {
 		return list;
 	}
 
+	
 	@Override
 	public String login(String email, String password) {
 		List<User> list = (List<User>) dao.findAll();
 		for (User user : list) {
 			String emailid = user.getEmail();
 			String pass = user.getPassword();
+			System.out.println(pass);
+			System.out.println(password);
 			if (email.compareToIgnoreCase(emailid) == 0) {
 
-				System.out.println(matches(password, pass));
-				if (matches(password, pass)) {
+				if (bcryptPassword.matches(password, pass)) {
+					System.out.println(bcryptPassword.matches(password, pass));
 					if (user.isStatus()) {
+						
 						return "Welcome to Disney Land";
 					}
-				} else {
-					return "you are not Authorized yet";
+					else {
+						return "you are not authorized yet";
+					}
+				}
+				else {
+					return "password is incorrect";
 				}
 			}
 		}
@@ -118,8 +110,9 @@ public class UserServiceImpl implements UserService {
 
 	}
 
-	public void parseToken(String token) {
+	public String  parseToken(String token) {
 		String email = jwtProvider.parseToken(token);
+		System.out.println(email);
 		List<User> list = (List<User>) dao.findAll();
 		for (User user : list) {
 			User obj = user;
@@ -128,10 +121,10 @@ public class UserServiceImpl implements UserService {
 
 				user.setStatus(true);
 				dao.save(user);
-
+               
 			}
 		}
-
+		return email;
 	}
 
 	@Override
@@ -142,7 +135,7 @@ public class UserServiceImpl implements UserService {
 			String emailid = obj.getEmail();
 			if (email.compareToIgnoreCase(emailid) == 0) {
 				String url = "http://localhost:8080/users/update-password";
-				JmsProvider.sendEmail(email, "for update password", url + "?email=" + email);
+				JmsProvider.sendEmail(email, "for update password", url);
 
 			}
 		}
@@ -164,5 +157,6 @@ public class UserServiceImpl implements UserService {
 
 		}
 	}
+	
 
 }
