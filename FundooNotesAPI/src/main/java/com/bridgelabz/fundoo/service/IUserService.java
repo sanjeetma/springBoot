@@ -3,8 +3,6 @@ package com.bridgelabz.fundoo.service;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.web.bind.annotation.PathVariable;
-
 import com.bridgelabz.fundoo.model.User;
 
 public interface IUserService {
@@ -17,11 +15,11 @@ public interface IUserService {
 
 	public Optional<User> find(Long Id);
 
-	public String login(String email, String password);
+	public boolean login(String email, String password);
 
-	public String parseToken(String token);
+	public boolean parseToken(String token);
 
 	public void forgetPassword(String email);
 
-	public void updatePassword(String password, String Email);
+	public boolean updatePassword(String password, String Email);
 }

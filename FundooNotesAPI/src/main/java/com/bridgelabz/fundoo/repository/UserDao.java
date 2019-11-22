@@ -1,4 +1,4 @@
-package com.bridgelabz.fundoo.dao;
+package com.bridgelabz.fundoo.repository;
 
 import org.springframework.data.repository.CrudRepository;
 

@@ -2,7 +2,6 @@ package com.bridgelabz.fundoo.service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.regex.Pattern;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -13,8 +12,9 @@ import org.springframework.stereotype.Service;
 
 import com.bridgelabz.fundoo.configure.JmsProvider;
 import com.bridgelabz.fundoo.configure.JwtProvider;
-import com.bridgelabz.fundoo.dao.UserDao;
+import com.bridgelabz.fundoo.exception.UserNotFoundException;
 import com.bridgelabz.fundoo.model.User;
+import com.bridgelabz.fundoo.repository.UserDao;
 
 @Service
 public class UserServiceImpl implements IUserService {
@@ -77,12 +77,16 @@ public class UserServiceImpl implements IUserService {
 	@Override
 	public Optional<User> find(Long Id) {
 		Optional<User> list = dao.findById(Id);
+		if(list.isEmpty())
+		{
+			throw new UserNotFoundException();
+		}
 		return list;
 	}
 
 	
 	@Override
-	public String login(String email, String password) {
+	public boolean login(String email, String password) {
 		List<User> list = (List<User>) dao.findAll();
 		for (User user : list) {
 			String emailid = user.getEmail();
@@ -95,22 +99,17 @@ public class UserServiceImpl implements IUserService {
 					System.out.println(bcryptPassword.matches(password, pass));
 					if (user.isStatus()) {
 						
-						return "Welcome to Disney Land";
+						return true;
 					}
-					else {
-						return "you are not authorized yet";
-					}
-				}
-				else {
-					return "password is incorrect";
+					
 				}
 			}
 		}
-		return "Your  Email is Invalid";
-
+			return false;		
+				
 	}
 
-	public String  parseToken(String token) {
+	public boolean parseToken(String token) {
 		String email = jwtProvider.parseToken(token);
 		System.out.println(email);
 		List<User> list = (List<User>) dao.findAll();
@@ -121,10 +120,11 @@ public class UserServiceImpl implements IUserService {
 
 				user.setStatus(true);
 				dao.save(user);
+				return true;
                
 			}
 		}
-		return email;
+		return false;
 	}
 
 	@Override
@@ -143,7 +143,7 @@ public class UserServiceImpl implements IUserService {
 	}
 
 	@Override
-	public void updatePassword(String password, String email) {
+	public boolean updatePassword(String password, String email) {
 		List<User> list = (List<User>) dao.findAll();
 		for (User user : list) {
 			User obj = user;
@@ -153,9 +153,11 @@ public class UserServiceImpl implements IUserService {
 				String encryptpassword = EncryptPassword(plainTextPassword);
 				user.setPassword(encryptpassword);
 				dao.save(user);
+				return true;
 			}
 
 		}
+		return false;
 	}
 	
 

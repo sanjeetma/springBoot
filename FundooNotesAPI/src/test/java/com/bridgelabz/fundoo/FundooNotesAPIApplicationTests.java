@@ -10,7 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.bridgelabz.fundoo.dao.UserDao;
+import com.bridgelabz.fundoo.repository.UserDao;
 import com.bridgelabz.fundoo.service.IUserService;
 import com.bridgelabz.fundoo.service.UserServiceImpl;
 
@@ -28,8 +28,15 @@ class FundooNotesAPIApplicationTests {
 		String expected = "Welcome to Disney Land";
 		String email = "sanjeetjr047@gmail.com";
 		String password = "sanjeet";
-		String message = userservice.login(email, password);
-		assertEquals(expected, message);
+		boolean  message = userservice.login(email, password);
+		assertEquals(true, message);
+	}
+	@Test
+	public void registerTest() {
+		String name="raju";
+		String email="raju007@gmail.com";
+		String password="raju";
+		
 	}
 
 }

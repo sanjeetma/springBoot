@@ -9,9 +9,18 @@ import javax.persistence.Table;
 
 import org.springframework.stereotype.Component;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 @Entity
 @Table
 @Component
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class User implements Serializable  {
 	
 	/**
@@ -29,47 +38,12 @@ public class User implements Serializable  {
 	private boolean status;
 	@Column
 	private String password;
-	
-	
-	public User(){
 		
-	}	
-	
 	public User(UserDto userdto) {
 		this.email=userdto.getEmail();	
 		this.password=userdto.getPassword();
 	}
-	public String getPassword() {
-		return password;
-	}
-	public void setPassword(String password) {
-		this.password = password;
-	}
-	public Long getId() {
-		return Id;
-	}
-	public void setId(Long id) {
-		this.Id = id;
-	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public String getEmail() {
-		return email;
-	}
-	public void setEmail(String email) {
-		this.email = email;
-	}
-	public boolean isStatus() {
-		return status;
-	}
-	public void setStatus(boolean status) {
-		this.status = status;
-	}
-
+	
 	
 	
 }
