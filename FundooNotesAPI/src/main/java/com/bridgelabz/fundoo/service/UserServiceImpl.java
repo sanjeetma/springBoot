@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import com.bridgelabz.fundoo.configure.JmsProvider;
 import com.bridgelabz.fundoo.configure.JwtProvider;
+import com.bridgelabz.fundoo.exception.RegisterUnSuccesFullException;
+import com.bridgelabz.fundoo.exception.UserNotFoundAtGivenIndex;
 import com.bridgelabz.fundoo.exception.UserNotFoundException;
 import com.bridgelabz.fundoo.model.User;
 import com.bridgelabz.fundoo.repository.UserDao;
@@ -27,7 +29,8 @@ public class UserServiceImpl implements IUserService {
 
 	private final Log logger = LogFactory.getLog(getClass());
 
-	//private Pattern BCRYPT_PATTERN = Pattern.compile("\\A\\$2(a|y|b)?\\$(\\d\\d)\\$[./0-9A-Za-z]{53}");
+	// private Pattern BCRYPT_PATTERN =
+	// Pattern.compile("\\A\\$2(a|y|b)?\\$(\\d\\d)\\$[./0-9A-Za-z]{53}");
 
 	@Autowired
 	JwtProvider jwtProvider;
@@ -46,7 +49,9 @@ public class UserServiceImpl implements IUserService {
 		for (User userlist : list) {
 			String emailid = userlist.getEmail();
 			if (email.compareToIgnoreCase(emailid) == 0) {
-				bool = true;
+				bool=true;
+				//return true;
+				throw new RegisterUnSuccesFullException();
 			}
 		}
 		if (bool == false) {
@@ -64,7 +69,13 @@ public class UserServiceImpl implements IUserService {
 
 	@Override
 	public List<User> GetUser() {
-		return (List<User>) dao.findAll();
+	 List<User> list=(List<User>)dao.findAll();
+	 if(list.size()>0) {
+		 return list;
+	 }
+	 else {
+		 throw new UserNotFoundException();
+	 }
 
 	}
 
@@ -76,15 +87,13 @@ public class UserServiceImpl implements IUserService {
 
 	@Override
 	public Optional<User> find(Long Id) {
-		Optional<User> list = dao.findById(Id);
-		if(list.isEmpty())
-		{
-			throw new UserNotFoundException();
+		Optional<User> user = dao.findById(Id);
+		if (user.isPresent()) {
+			return user;
 		}
-		return list;
+		throw new UserNotFoundAtGivenIndex(Id);
 	}
 
-	
 	@Override
 	public boolean login(String email, String password) {
 		List<User> list = (List<User>) dao.findAll();
@@ -98,15 +107,15 @@ public class UserServiceImpl implements IUserService {
 				if (bcryptPassword.matches(password, pass)) {
 					System.out.println(bcryptPassword.matches(password, pass));
 					if (user.isStatus()) {
-						
+
 						return true;
 					}
-					
+
 				}
 			}
 		}
-			return false;		
-				
+		throw new UserNotFoundException();
+
 	}
 
 	public boolean parseToken(String token) {
@@ -121,14 +130,14 @@ public class UserServiceImpl implements IUserService {
 				user.setStatus(true);
 				dao.save(user);
 				return true;
-               
+
 			}
 		}
 		return false;
 	}
 
 	@Override
-	public void forgetPassword(String email) {
+	public boolean forgetPassword(String email) {
 		List<User> list = (List<User>) dao.findAll();
 		for (User user : list) {
 			User obj = user;
@@ -136,9 +145,11 @@ public class UserServiceImpl implements IUserService {
 			if (email.compareToIgnoreCase(emailid) == 0) {
 				String url = "http://localhost:8080/users/update-password";
 				JmsProvider.sendEmail(email, "for update password", url);
+				return true;
 
 			}
 		}
+		throw new UserNotFoundException();
 
 	}
 
@@ -157,8 +168,7 @@ public class UserServiceImpl implements IUserService {
 			}
 
 		}
-		return false;
+		throw new UserNotFoundException();
 	}
-	
 
 }

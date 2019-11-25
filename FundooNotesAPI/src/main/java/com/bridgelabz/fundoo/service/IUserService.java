@@ -19,7 +19,7 @@ public interface IUserService {
 
 	public boolean parseToken(String token);
 
-	public void forgetPassword(String email);
+	public boolean forgetPassword(String email);
 
 	public boolean updatePassword(String password, String Email);
 }

@@ -1,17 +1,13 @@
 package com.bridgelabz.fundoo.exception;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
 public class UserExceptionHandler{
-	static final String validation_Failure_Message="validation failure";
+	//static final String validation_Failure_Message="validation failure";
 
 	@ExceptionHandler(value=UserNotFoundException.class)
 	public ResponseEntity<Object> generalException(Exception e){
@@ -20,5 +16,17 @@ public class UserExceptionHandler{
 		return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
 		
 		
+	}
+	@ExceptionHandler(value=UserNotFoundAtGivenIndex.class)
+	public ResponseEntity<Object> userNotFoundException(Exception e){
+		
+		//<String, String> errors=new HashMap<String,String>() ;
+		return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+		
+		
+	}
+	@ExceptionHandler(value=RegisterUnSuccesFullException.class)
+	public ResponseEntity<Object> registerUnsuccessFullException(Exception e){
+		return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 }
