@@ -1,5 +1,6 @@
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                package com.bridgelabz.fundoo;
 
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
@@ -25,11 +26,11 @@ class FundooNotesAPIApplicationTests {
 
 	@Test
 	public void loginTest() {
-		String expected = "Welcome to Disney Land";
 		String email = "bridgelab123@gmail.com";
 		String password = "sanjeetkumar";
 		boolean  message = userservice.login(email, password);
-		assertEquals(true, message);
+	//	assertEquals(true, message);
+		assertTrue(message);
 	}
 	@Test
 	public void listTest() {

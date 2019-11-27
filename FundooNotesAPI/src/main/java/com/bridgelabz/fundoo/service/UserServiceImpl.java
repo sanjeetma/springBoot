@@ -3,8 +3,6 @@ package com.bridgelabz.fundoo.service;
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,7 +14,9 @@ import com.bridgelabz.fundoo.exception.RegisterUnSuccesFullException;
 import com.bridgelabz.fundoo.exception.UserNotFoundAtGivenIndex;
 import com.bridgelabz.fundoo.exception.UserNotFoundException;
 import com.bridgelabz.fundoo.model.User;
+import com.bridgelabz.fundoo.model.UserNote;
 import com.bridgelabz.fundoo.repository.UserDao;
+import com.bridgelabz.fundoo.repository.UserNotesDao;
 
 @Service
 public class UserServiceImpl implements IUserService {
@@ -24,10 +24,13 @@ public class UserServiceImpl implements IUserService {
 	@Autowired
 	private UserDao dao;
 
+	 @Autowired
+	 private UserNotesDao notesdao;
+
 	@Autowired
 	private static PasswordEncoder bcryptPassword = new BCryptPasswordEncoder();
 
-	private final Log logger = LogFactory.getLog(getClass());
+	//private final Log logger = LogFactory.getLog(getClass());
 
 	// private Pattern BCRYPT_PATTERN =
 	// Pattern.compile("\\A\\$2(a|y|b)?\\$(\\d\\d)\\$[./0-9A-Za-z]{53}");
@@ -49,8 +52,8 @@ public class UserServiceImpl implements IUserService {
 		for (User userlist : list) {
 			String emailid = userlist.getEmail();
 			if (email.compareToIgnoreCase(emailid) == 0) {
-				bool=true;
-				//return true;
+				bool = true;
+				// return true;
 				throw new RegisterUnSuccesFullException();
 			}
 		}
@@ -69,13 +72,12 @@ public class UserServiceImpl implements IUserService {
 
 	@Override
 	public List<User> GetUser() {
-	 List<User> list=(List<User>)dao.findAll();
-	 if(list.size()>0) {
-		 return list;
-	 }
-	 else {
-		 throw new UserNotFoundException();
-	 }
+		List<User> list = (List<User>) dao.findAll();
+		if (list.size() > 0) {
+			return list;
+		} else {
+			throw new UserNotFoundException();
+		}
 
 	}
 
@@ -169,6 +171,18 @@ public class UserServiceImpl implements IUserService {
 
 		}
 		throw new UserNotFoundException();
+	}
+
+	@Override
+	public String createNote(UserNote note) {
+		notesdao.save(note);
+		return null;
+	}
+
+	@Override
+	public String deleteNotes(long id) {
+       notesdao.deleteById(id);
+		return null;
 	}
 
 }

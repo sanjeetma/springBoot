@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.bridgelabz.fundoo.model.User;
+import com.bridgelabz.fundoo.model.UserNote;
 
 public interface IUserService {
 
@@ -22,4 +23,8 @@ public interface IUserService {
 	public boolean forgetPassword(String email);
 
 	public boolean updatePassword(String password, String Email);
+
+	public String createNote(UserNote note);
+	
+	public String deleteNotes(long id);
 }

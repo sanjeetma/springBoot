@@ -8,7 +8,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 @Component
 public class JwtProvider {
 	
-		//private final long EXPIRATION_TIME = 10000;
+		private final long EXPIRATION_TIME = 10000;
 		private final String secret = "Sanjeet";
 
 		public String generateToken(String emailId) {
