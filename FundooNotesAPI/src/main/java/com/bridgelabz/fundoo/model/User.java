@@ -3,11 +3,13 @@ package com.bridgelabz.fundoo.model;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-import javax.persistence.JoinTable;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
@@ -58,13 +60,16 @@ public class User implements Serializable {
 	@Pattern(regexp = "(^$|[0-9]{10})", message = "mobile number invalid")
 	private String mobile;
 
-	@OneToMany
-	@JoinTable
-	private List<UserNote> usernote ;
-		
+	
+	
+	@OneToMany(targetEntity = Note.class,cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+	@JoinColumn(name="Id")
+	private List<Note> note;
+
 	public User(UserDto userdto) {
 		this.email = userdto.getEmail();
 		this.password = userdto.getPassword();
 	}
+	
 
 }

@@ -14,7 +14,7 @@ import com.bridgelabz.fundoo.exception.RegisterUnSuccesFullException;
 import com.bridgelabz.fundoo.exception.UserNotFoundAtGivenIndex;
 import com.bridgelabz.fundoo.exception.UserNotFoundException;
 import com.bridgelabz.fundoo.model.User;
-import com.bridgelabz.fundoo.model.UserNote;
+import com.bridgelabz.fundoo.model.Note;
 import com.bridgelabz.fundoo.repository.UserDao;
 import com.bridgelabz.fundoo.repository.UserNotesDao;
 
@@ -24,13 +24,10 @@ public class UserServiceImpl implements IUserService {
 	@Autowired
 	private UserDao dao;
 
-	 @Autowired
-	 private UserNotesDao notesdao;
-
 	@Autowired
 	private static PasswordEncoder bcryptPassword = new BCryptPasswordEncoder();
 
-	//private final Log logger = LogFactory.getLog(getClass());
+	// private final Log logger = LogFactory.getLog(getClass());
 
 	// private Pattern BCRYPT_PATTERN =
 	// Pattern.compile("\\A\\$2(a|y|b)?\\$(\\d\\d)\\$[./0-9A-Za-z]{53}");
@@ -45,19 +42,19 @@ public class UserServiceImpl implements IUserService {
 	}
 
 	@Override
-	public boolean save(User user) {
-		List<User> list = (List<User>) dao.findAll();
-		boolean bool = false;
+	public boolean register(User user) {
+		List<User> userlist = (List<User>) dao.findAll();
+		boolean status = false;
 		String email = user.getEmail();
-		for (User userlist : list) {
-			String emailid = userlist.getEmail();
+		for (User userList : userlist) {
+			String emailid = userList.getEmail();
 			if (email.compareToIgnoreCase(emailid) == 0) {
-				bool = true;
+				status = true;
 				// return true;
 				throw new RegisterUnSuccesFullException();
 			}
 		}
-		if (bool == false) {
+		if (status == false) {
 			String plainTextPassword = user.getPassword();
 			String encryptpassword = EncryptPassword(plainTextPassword);
 			user.setPassword(encryptpassword);
@@ -67,14 +64,14 @@ public class UserServiceImpl implements IUserService {
 			JmsProvider.sendEmail(email, "for Authorization", Url + jwtString);
 
 		}
-		return bool;
+		return status;
 	}
 
 	@Override
 	public List<User> GetUser() {
-		List<User> list = (List<User>) dao.findAll();
-		if (list.size() > 0) {
-			return list;
+		List<User> userlist = (List<User>) dao.findAll();
+		if (userlist.size() > 0) {
+			return userlist;
 		} else {
 			throw new UserNotFoundException();
 		}
@@ -171,18 +168,6 @@ public class UserServiceImpl implements IUserService {
 
 		}
 		throw new UserNotFoundException();
-	}
-
-	@Override
-	public String createNote(UserNote note) {
-		notesdao.save(note);
-		return null;
-	}
-
-	@Override
-	public String deleteNotes(long id) {
-       notesdao.deleteById(id);
-		return null;
 	}
 
 }

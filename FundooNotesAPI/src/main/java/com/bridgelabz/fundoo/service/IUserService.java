@@ -4,11 +4,11 @@ import java.util.List;
 import java.util.Optional;
 
 import com.bridgelabz.fundoo.model.User;
-import com.bridgelabz.fundoo.model.UserNote;
+import com.bridgelabz.fundoo.model.Note;
 
 public interface IUserService {
 
-	boolean save(User user);
+	boolean register(User user);
 
 	public List<User> GetUser();
 
@@ -24,7 +24,4 @@ public interface IUserService {
 
 	public boolean updatePassword(String password, String Email);
 
-	public String createNote(UserNote note);
-	
-	public String deleteNotes(long id);
 }

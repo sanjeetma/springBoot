@@ -13,7 +13,7 @@ public class UserExceptionHandler{
 	public ResponseEntity<Object> generalException(Exception e){
 		
 		//<String, String> errors=new HashMap<String,String>() ;
-		return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<>(e.getMessage(),HttpStatus.UNAUTHORIZED);
 		
 		
 	}
@@ -21,12 +21,12 @@ public class UserExceptionHandler{
 	public ResponseEntity<Object> userNotFoundException(Exception e){
 		
 		//<String, String> errors=new HashMap<String,String>() ;
-		return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
 		
 		
 	}
 	@ExceptionHandler(value=RegisterUnSuccesFullException.class)
 	public ResponseEntity<Object> registerUnsuccessFullException(Exception e){
-		return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<>(e.getMessage(),HttpStatus.RESET_CONTENT);
 	}
 }

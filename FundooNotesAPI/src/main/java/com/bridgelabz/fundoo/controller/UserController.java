@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bridgelabz.fundoo.exception.ExceptionResolve;
 import com.bridgelabz.fundoo.model.User;
 import com.bridgelabz.fundoo.model.UserDto;
-import com.bridgelabz.fundoo.model.UserNote;
+import com.bridgelabz.fundoo.model.Note;
 import com.bridgelabz.fundoo.service.IUserService;
 
 @RestController
@@ -37,7 +37,7 @@ public class UserController {
 	@PostMapping("/users/register")
 	public ResponseEntity<ExceptionResolve> saveuser(@Valid @RequestBody User user) throws Exception {
 
-		boolean bool = iUserService.save(user);
+		boolean bool = iUserService.register(user);
 		if (bool == false) {
 			return new ResponseEntity<>(
 					new ExceptionResolve(HttpStatus.OK.value(), "you are succesfully registered", user), HttpStatus.OK);
@@ -115,15 +115,5 @@ public class UserController {
 
 	}
 
-	@GetMapping("/createNote")
-	public String createNote(@RequestBody UserNote note) {
-		iUserService.createNote(note);
-		return "Note is created";
-	}
-
-	@GetMapping("/deleteNote/{note_id}")
-	public String deleteNote(@PathVariable(name="note_id") Long id) {
-		iUserService.deleteNotes(id);
-		return "Note is deleted";
-	}
+	
 }
