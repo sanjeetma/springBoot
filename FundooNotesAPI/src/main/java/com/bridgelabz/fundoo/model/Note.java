@@ -1,5 +1,7 @@
 package com.bridgelabz.fundoo.model;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,6 +23,7 @@ import lombok.Setter;
 @Entity
 @Table(name="note")
 public class Note {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "note_id")
@@ -33,7 +36,17 @@ public class Note {
 	@Column(name = "description")
 	private String description;
 	
+	@Column
+	private boolean isArchieved;
 	
+	@Column
+	private boolean isPin;
+	
+	@Column
+	private String color;
+	
+	@Column
+	private LocalDateTime createdtime;
 	
 	
 	

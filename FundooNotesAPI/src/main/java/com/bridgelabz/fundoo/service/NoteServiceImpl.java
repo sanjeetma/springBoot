@@ -1,5 +1,7 @@
 package com.bridgelabz.fundoo.service;
 
+import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,9 +15,11 @@ import com.bridgelabz.fundoo.repository.UserNotesDao;
 public class NoteServiceImpl implements INoteService {
 	@Autowired
 	private UserNotesDao notesdao;
-
+	
+	
 	@Override
 	public String createNote(Note note) {
+		note.setCreatedtime(LocalDateTime.now());
 		notesdao.save(note);
 		return null;
 	}

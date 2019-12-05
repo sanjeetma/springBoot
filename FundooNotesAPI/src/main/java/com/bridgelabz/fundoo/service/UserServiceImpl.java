@@ -95,8 +95,9 @@ public class UserServiceImpl implements IUserService {
 
 	@Override
 	public boolean login(String email, String password) {
-		List<User> list = (List<User>) dao.findAll();
-		for (User user : list) {
+		System.out.println("i am login");
+		List<User> userlist = (List<User>) dao.findAll();
+		for (User user : userlist) {
 			String emailid = user.getEmail();
 			String pass = user.getPassword();
 			System.out.println(pass);
@@ -120,10 +121,9 @@ public class UserServiceImpl implements IUserService {
 	public boolean parseToken(String token) {
 		String email = jwtProvider.parseToken(token);
 		System.out.println(email);
-		List<User> list = (List<User>) dao.findAll();
-		for (User user : list) {
-			User obj = user;
-			String emailid = obj.getEmail();
+		List<User> userlist = (List<User>) dao.findAll();
+		for (User user : userlist) {
+			String emailid =user.getEmail();
 			if (email.compareToIgnoreCase(emailid) == 0) {
 
 				user.setStatus(true);
@@ -137,10 +137,9 @@ public class UserServiceImpl implements IUserService {
 
 	@Override
 	public boolean forgetPassword(String email) {
-		List<User> list = (List<User>) dao.findAll();
-		for (User user : list) {
-			User obj = user;
-			String emailid = obj.getEmail();
+		List<User> userlist = (List<User>) dao.findAll();
+		for (User user : userlist) {
+			String emailid = user.getEmail();
 			if (email.compareToIgnoreCase(emailid) == 0) {
 				String url = "http://localhost:8080/users/update-password";
 				JmsProvider.sendEmail(email, "for update password", url);
@@ -154,10 +153,9 @@ public class UserServiceImpl implements IUserService {
 
 	@Override
 	public boolean updatePassword(String password, String email) {
-		List<User> list = (List<User>) dao.findAll();
-		for (User user : list) {
-			User obj = user;
-			String emailid = obj.getEmail();
+		List<User> userlist = (List<User>) dao.findAll();
+		for (User user : userlist) {
+			String emailid = user.getEmail();
 			if (email.compareToIgnoreCase(emailid) == 0) {
 				String plainTextPassword = user.getPassword();
 				String encryptpassword = EncryptPassword(plainTextPassword);

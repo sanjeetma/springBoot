@@ -1,6 +1,7 @@
 package com.bridgelabz.fundoo.model;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -46,7 +47,7 @@ public class User implements Serializable {
 	private String name;
 	@Column
 	@NotEmpty
-	@Email
+	//@Email
 	private String email;
 	@Column
 	private boolean status;
@@ -60,7 +61,8 @@ public class User implements Serializable {
 	@Pattern(regexp = "(^$|[0-9]{10})", message = "mobile number invalid")
 	private String mobile;
 
-	
+//	@Column
+//	private LocalDateTime localdatetime;
 	
 	@OneToMany(targetEntity = Note.class,cascade = CascadeType.ALL,fetch = FetchType.LAZY)
 	@JoinColumn(name="Id")
