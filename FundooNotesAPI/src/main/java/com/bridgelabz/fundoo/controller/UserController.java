@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,6 +24,7 @@ import com.bridgelabz.fundoo.exception.ExceptionResolve;
 import com.bridgelabz.fundoo.model.User;
 import com.bridgelabz.fundoo.model.UserDto;
 import com.bridgelabz.fundoo.model.Note;
+import com.bridgelabz.fundoo.model.ResetDto;
 import com.bridgelabz.fundoo.service.IUserService;
 
 @RestController
@@ -101,20 +103,18 @@ public class UserController {
 
 	}
 
-	@GetMapping("/users/forgetpassword")
+	@PostMapping("/users/forgetpassword")
 	public ResponseEntity<ExceptionResolve> forgetPassword(@RequestBody UserDto userdto) {
 		String email = userdto.getEmail();
-		iUserService.forgetPassword(email);
-		return new ResponseEntity<>(new ExceptionResolve(HttpStatus.OK.value(), "email sent to your email id"),
-				HttpStatus.OK);
+		String token=iUserService.forgetPassword(email);
+		return new ResponseEntity<>(new ExceptionResolve(HttpStatus.OK.value(),token),HttpStatus.OK);
+				
 
 	}
 
-	@PutMapping("/users/update-password")
-	public ResponseEntity<ExceptionResolve> updatePassword(@RequestBody UserDto userdto) {
-		String email = userdto.getEmail();
-		String password = userdto.getPassword();
-		boolean status = iUserService.updatePassword(password, email);
+	@PostMapping("/users/update-password")
+	public ResponseEntity<ExceptionResolve> updatePassword(@RequestHeader String token, @RequestBody ResetDto resetdto ) {
+		boolean status = iUserService.updatePassword(token,resetdto);
 		return new ResponseEntity<>(new ExceptionResolve(HttpStatus.OK.value(), "password Updated"), HttpStatus.OK);
 
 	}

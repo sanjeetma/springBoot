@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import com.bridgelabz.fundoo.model.User;
 import com.bridgelabz.fundoo.model.Note;
+import com.bridgelabz.fundoo.model.ResetDto;
 
 public interface IUserService {
 
@@ -20,8 +21,8 @@ public interface IUserService {
 
 	public boolean parseToken(String token);
 
-	public boolean forgetPassword(String email);
+	public String forgetPassword(String email);
 
-	public boolean updatePassword(String password, String Email);
+	public boolean updatePassword(String token,ResetDto password);
 
 }

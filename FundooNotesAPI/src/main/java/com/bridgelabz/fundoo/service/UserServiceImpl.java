@@ -15,6 +15,7 @@ import com.bridgelabz.fundoo.exception.UserNotFoundAtGivenIndex;
 import com.bridgelabz.fundoo.exception.UserNotFoundException;
 import com.bridgelabz.fundoo.model.User;
 import com.bridgelabz.fundoo.model.Note;
+import com.bridgelabz.fundoo.model.ResetDto;
 import com.bridgelabz.fundoo.repository.UserDao;
 import com.bridgelabz.fundoo.repository.UserNotesDao;
 
@@ -136,28 +137,30 @@ public class UserServiceImpl implements IUserService {
 	}
 
 	@Override
-	public boolean forgetPassword(String email) {
+	public String forgetPassword(String email) {
 		List<User> userlist = (List<User>) dao.findAll();
 		for (User user : userlist) {
 			String emailid = user.getEmail();
 			if (email.compareToIgnoreCase(emailid) == 0) {
-				String url = "http://localhost:8080/users/update-password";
-				JmsProvider.sendEmail(email, "for update password", url);
-				return true;
+				String url = "http://localhost:4200/resetPassword/";
+				String token=jwtProvider.generateToken(email);
+				JmsProvider.sendEmail(email, "for update password", url+token);
+				return token;
 
 			}
 		}
 		throw new UserNotFoundException();
-
+     
 	}
 
 	@Override
-	public boolean updatePassword(String password, String email) {
+	public boolean updatePassword( String token,ResetDto password) {
 		List<User> userlist = (List<User>) dao.findAll();
+		String email=jwtProvider.parseToken(token);
 		for (User user : userlist) {
 			String emailid = user.getEmail();
 			if (email.compareToIgnoreCase(emailid) == 0) {
-				String plainTextPassword = user.getPassword();
+				String plainTextPassword = password.getPassword();
 				String encryptpassword = EncryptPassword(plainTextPassword);
 				user.setPassword(encryptpassword);
 				dao.save(user);

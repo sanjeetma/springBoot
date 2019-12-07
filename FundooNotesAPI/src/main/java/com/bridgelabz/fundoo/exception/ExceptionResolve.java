@@ -27,6 +27,7 @@ public class ExceptionResolve implements Serializable {
 	private Object user;
 	
 	
+	
 //	public ExceptionResolve(Integer staus,String message,Object user) {
 //		
 //		this.staus = staus;
