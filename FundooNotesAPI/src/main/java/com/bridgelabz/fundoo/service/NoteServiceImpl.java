@@ -5,10 +5,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bridgelabz.fundoo.model.Note;
+import com.bridgelabz.fundoo.model.NoteDto;
 import com.bridgelabz.fundoo.repository.UserNotesDao;
 
 @Service
@@ -16,9 +19,13 @@ public class NoteServiceImpl implements INoteService {
 	@Autowired
 	private UserNotesDao notesdao;
 	
+	@Autowired
+	private Note note;
 	
 	@Override
-	public String createNote(Note note) {
+	public String createNote(NoteDto notedto) {
+		note.setTittle(notedto.getTitle());
+		note.setDescription(notedto.getDesc());
 		note.setCreatedtime(LocalDateTime.now());
 		notesdao.save(note);
 		return null;
@@ -36,9 +43,11 @@ public class NoteServiceImpl implements INoteService {
 			return list;	
 	}
 
+
 	@Override
+	@Transactional
 	public List<Note> allNotes() {
-		List<Note> noteList=notesdao.findAll();
+		List<Note> noteList=notesdao.findNotes();
 		return noteList;
 	}
 

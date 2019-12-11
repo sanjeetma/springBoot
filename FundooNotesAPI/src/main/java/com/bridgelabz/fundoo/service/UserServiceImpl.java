@@ -3,6 +3,8 @@ package com.bridgelabz.fundoo.service;
 import java.util.List;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -69,8 +71,9 @@ public class UserServiceImpl implements IUserService {
 	}
 
 	@Override
+	@Transactional
 	public List<User> GetUser() {
-		List<User> userlist = (List<User>) dao.findAll();
+		List<User> userlist = (List<User>) dao.findUsers();
 		if (userlist.size() > 0) {
 			return userlist;
 		} else {

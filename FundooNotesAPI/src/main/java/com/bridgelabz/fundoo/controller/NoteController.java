@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,10 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bridgelabz.fundoo.model.Note;
+import com.bridgelabz.fundoo.model.NoteDto;
 import com.bridgelabz.fundoo.service.INoteService;
 
 @RestController
 @RequestMapping("/")
+@CrossOrigin(origins = "http://localhost:4200")
 public class NoteController {
 	
 	
@@ -24,8 +27,8 @@ public class NoteController {
 	INoteService noteservice; 
 	
 	@PostMapping("/notes/create")
-	public String createNote(@RequestBody Note note) {
-		noteservice.createNote(note);
+	public String createNote(@RequestBody NoteDto notedto) {
+		noteservice.createNote(notedto);
 		return "Note is created";
 	}
 

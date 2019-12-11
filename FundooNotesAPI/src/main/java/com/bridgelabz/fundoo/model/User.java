@@ -47,17 +47,17 @@ public class User implements Serializable  {
 	private Long Id;
 	@Column
 	@NotEmpty
-	@Length(min = 3, max = 20)
+	@Length(min = 5, max = 20)
 	private String name;
 	@Column
 	@NotEmpty
-	//@Email
+	@Email
 	private String email;
 	@Column
 	private boolean status;
 	@Column
 	@NotEmpty
-	@Length(min = 3, max = 255, message = "password must be 8 character")
+	@Length(min = 5, max = 255, message = "password must be 8 character")
 	private String password;
 
 	@Column

@@ -9,13 +9,16 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.springframework.stereotype.Component;
+
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
-
+@Component
+@Data
 @Setter
 @Getter
 @AllArgsConstructor
@@ -48,6 +51,17 @@ public class Note {
 	@Column
 	private LocalDateTime createdtime;
 	
+	@Column
+	private String collabrator;
+	
+	
+	@Column
+	private LocalDateTime reminderTime;
+	
+	Note(NoteDto notedto){
+		this.tittle=notedto.getTitle();
+		this.description=notedto.getDesc();
+	}
 	
 	
 }

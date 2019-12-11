@@ -9,7 +9,7 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 public class FundooNotesAPI {
 
 	public static void main(String[] args) {
-		SpringApplication.run(FundooNotesAPI.class, args);
+		SpringApplication.run(FundooNotesAPI.class,args);
 	}
 
 }

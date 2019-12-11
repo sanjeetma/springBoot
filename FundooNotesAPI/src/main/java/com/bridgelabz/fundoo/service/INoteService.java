@@ -4,10 +4,11 @@ import java.util.List;
 import java.util.Optional;
 
 import com.bridgelabz.fundoo.model.Note;
+import com.bridgelabz.fundoo.model.NoteDto;
 
 public interface INoteService {
 
-	public String createNote(Note note);
+	public String createNote(NoteDto notedto );
 
 	public String deleteNoteById(long id);
 
