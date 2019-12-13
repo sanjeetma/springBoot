@@ -14,8 +14,8 @@ import io.lettuce.core.dynamic.annotation.Param;
 
 public interface  UserNotesDao extends JpaRepository<Note, Long>{//CrudRepository<UserNote, Long>{
 
-	@Query("select n from Note n")
-   public List<Note> findNotes();
+//	@Query("select n from Note n")
+//   public List<Note> findNotes();
 	
 //	@Query("select n from Note n where id=?")
 //	public List<Note> findNotesByUserId(@PathVariable long id);

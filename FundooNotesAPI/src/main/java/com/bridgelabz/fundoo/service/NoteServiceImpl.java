@@ -18,12 +18,11 @@ import com.bridgelabz.fundoo.repository.UserNotesDao;
 public class NoteServiceImpl implements INoteService {
 	@Autowired
 	private UserNotesDao notesdao;
-	
-	@Autowired
-	private Note note;
+
 	
 	@Override
 	public String createNote(NoteDto notedto) {
+		Note note = new Note();
 		note.setTittle(notedto.getTitle());
 		note.setDescription(notedto.getDesc());
 		note.setCreatedtime(LocalDateTime.now());
@@ -47,7 +46,7 @@ public class NoteServiceImpl implements INoteService {
 	@Override
 	@Transactional
 	public List<Note> allNotes() {
-		List<Note> noteList=notesdao.findNotes();
+		List<Note> noteList=notesdao.findAll();
 		return noteList;
 	}
 
