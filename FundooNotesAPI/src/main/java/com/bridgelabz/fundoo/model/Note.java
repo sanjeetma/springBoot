@@ -58,7 +58,7 @@ public class Note {
 	@Column
 	private LocalDateTime reminderTime;
 	
-	Note(NoteDto notedto){
+	public Note(NoteDto notedto){
 		this.tittle=notedto.getTitle();
 		this.description=notedto.getDesc();
 	}

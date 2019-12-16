@@ -98,7 +98,7 @@ public class UserServiceImpl implements IUserService {
 	}
 
 	@Override
-	public boolean login(String email, String password) {
+	public String login(String email, String password) {
 		System.out.println("i am login");
 		List<User> userlist = (List<User>) dao.findAll();
 		for (User user : userlist) {
@@ -109,10 +109,13 @@ public class UserServiceImpl implements IUserService {
 			if (email.compareToIgnoreCase(emailid) == 0) {
 
 				if (bcryptPassword.matches(password, pass)) {
+					
 					System.out.println(bcryptPassword.matches(password, pass));
 					if (user.isStatus()) {
+						Long id=user.getId();
+						String token=jwtProvider.generateToken(id);
 
-						return true;
+						return token;
 					}
 
 				}

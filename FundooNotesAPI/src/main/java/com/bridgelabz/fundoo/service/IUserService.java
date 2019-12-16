@@ -17,7 +17,7 @@ public interface IUserService {
 
 	public Optional<User> find(Long Id);
 
-	public boolean login(String email, String password);
+	public String login(String email, String password);
 
 	public boolean parseToken(String token);
 

@@ -84,10 +84,10 @@ public class UserController {
 
 		String email = userdto.getEmail();
 		String password = userdto.getPassword();
-		boolean bool = iUserService.login(email, password);
+		String token = iUserService.login(email, password);
 
 		return new ResponseEntity<>(
-				new ExceptionResolve(HttpStatus.OK.value(), "you are succesfully logged in", userdto), HttpStatus.OK);
+				new ExceptionResolve(HttpStatus.OK.value(), token), HttpStatus.OK);
 
 	}
 

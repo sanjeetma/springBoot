@@ -1,5 +1,6 @@
 package com.bridgelabz.fundoo.repository;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,4 +20,7 @@ public interface  UserNotesDao extends JpaRepository<Note, Long>{//CrudRepositor
 	
 //	@Query("select n from Note n where id=?")
 //	public List<Note> findNotesByUserId(@PathVariable long id);
+	
+	@Query("select n from Note n where Id=:Id")
+	Collection<Note> findAllNote(@Param("Id") Long Id);
 }

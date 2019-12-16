@@ -7,28 +7,46 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bridgelabz.fundoo.configure.JwtProvider;
 import com.bridgelabz.fundoo.model.Note;
 import com.bridgelabz.fundoo.model.NoteDto;
+import com.bridgelabz.fundoo.model.User;
+import com.bridgelabz.fundoo.repository.UserDao;
 import com.bridgelabz.fundoo.repository.UserNotesDao;
 
 @Service
 public class NoteServiceImpl implements INoteService {
 	@Autowired
 	private UserNotesDao notesdao;
-
+	
+	@Autowired
+	private JwtProvider jwtprovider;
+	
+	
+	private ModelMapper modelmapper=new ModelMapper();
+	
+	@Autowired
+	private UserDao userdao;
+	
 	
 	@Override
-	public String createNote(NoteDto notedto) {
-		Note note = new Note();
-		note.setTittle(notedto.getTitle());
-		note.setDescription(notedto.getDesc());
+	public String createNote(String token,NoteDto notedto) {
+		Note note=new Note(notedto);
+		Long id=jwtprovider.verifyToken(token);
+		System.out.println(id);
+		Optional<User> userModel = userdao.findById(id);
+
+		Note noteModel = modelmapper.map(note, Note.class);
+		userModel.get().getNote().add(noteModel);
 		note.setCreatedtime(LocalDateTime.now());
+
 		notesdao.save(note);
 		return null;
-	}
+		}
 
 	@Override
 	public String deleteNoteById(long id) {
@@ -47,6 +65,14 @@ public class NoteServiceImpl implements INoteService {
 	@Transactional
 	public List<Note> allNotes() {
 		List<Note> noteList=notesdao.findAll();
+		return noteList;
+	}
+	
+	
+	@Transactional
+	public List<Note> allNotesi(String token) {
+		Long id=jwtprovider.verifyToken(token);
+		List<Note> noteList=(List<Note>) notesdao.findAllNote((long)id);
 		return noteList;
 	}
 
