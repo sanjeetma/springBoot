@@ -62,4 +62,22 @@ public class NoteController {
 		List<Note> list=noteservice.allNotesi(token);
 		return list;
 	}
+	@GetMapping("/notes/archive/{id}")
+	public ResponseEntity<ExceptionResolve>archiveNote(@PathVariable(name="id") Long id){
+		if(noteservice.archived(id)) {;
+		return new ResponseEntity<>(
+				new ExceptionResolve(HttpStatus.OK.value(), "note Archeived"), HttpStatus.OK);
+		}
+		else {
+			return new ResponseEntity<>(
+					new ExceptionResolve(HttpStatus.OK.value(), "note UnArcheived"), HttpStatus.OK);
+		}
+	
+	}
+	
+	@GetMapping("notes/getallarcheive")
+	public List<Note> getAllArchive(@RequestParam(name="id") String token) {
+		List<Note> list=noteservice.getAllArchieve(token);
+		return list;
+	}
 }

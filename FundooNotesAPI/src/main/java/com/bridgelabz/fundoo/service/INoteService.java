@@ -16,6 +16,10 @@ public interface INoteService {
 	
 	public List<Note> allNotes();
 	
-	List<Note> allNotesi(String token);
+	public List<Note> allNotesi(String token);
+	
+	public boolean archived(long id);
+	
+	public List<Note> getAllArchieve(String token);
 
 }
