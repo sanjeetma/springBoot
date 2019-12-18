@@ -46,9 +46,11 @@ public class NoteController {
 }
 	
 	@GetMapping("/notes/delete/{note_id}")
-	public String deleteNote(@PathVariable(name="note_id") long id) {
+	public ResponseEntity<ExceptionResolve> deleteNote(@PathVariable(name="note_id") Long id) {
 		noteservice.deleteNoteById(id);
-		return "Note is deleted";
+		 return new ResponseEntity<>(
+				new ExceptionResolve(HttpStatus.OK.value(), "note created"), HttpStatus.OK);
+	
 	}
 	@GetMapping("/notes/{note_id}")
 	public Optional<Note> getnotes(@PathVariable(name="note_id") long id) {

@@ -8,15 +8,26 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.mail.Message;
+
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Component;
 
+import com.bridgelabz.fundoo.model.RabbitMessageProvider;
+
 @Component
 public class JmsProvider {
 	
+
+	
+	@Autowired
+	public static RabbitTemplate tempRabbit;
 	private static JavaMailSender javaMailSender = new JavaMailSenderImpl();
+	public static final String EXCHANGE_NAME = "tips_tx";
+	   public static final String ROUTING_KEY = "tips";
 
 	public static void sendEmail(String toEmail, String subject, String body) {
 
@@ -47,12 +58,22 @@ public class JmsProvider {
 	message.setSubject(subject);
 	message.setText(body);
 	Transport.send(message);
-	//javaMailSender.send(message);
+	
 	} catch (Exception e) {
 	e.printStackTrace();
 	System.out.println("can not send mail  ");
 
 	}
 	}
+//	public static void sendRabbit(RabbitMessageProvider message) {
+//		tempRabbit.convertAndSend("tips_tx","tips",message);
+//	}
+//
+//	@RabbitListener(queues = "default_parser_q")
+//	public void sendToRabitMq(RabbitMessageProvider message) throws Exception{
+//		sendEmail(message.getEmail(), message.getLink(), message.getToken());
+//	}
+
+	
 	}
 

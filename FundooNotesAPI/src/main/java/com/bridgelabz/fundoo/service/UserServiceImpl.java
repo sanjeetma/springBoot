@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,25 +16,22 @@ import com.bridgelabz.fundoo.configure.JwtProvider;
 import com.bridgelabz.fundoo.exception.RegisterUnSuccesFullException;
 import com.bridgelabz.fundoo.exception.UserNotFoundAtGivenIndex;
 import com.bridgelabz.fundoo.exception.UserNotFoundException;
-import com.bridgelabz.fundoo.model.User;
-import com.bridgelabz.fundoo.model.Note;
+import com.bridgelabz.fundoo.model.RabbitMessageProvider;
 import com.bridgelabz.fundoo.model.ResetDto;
+import com.bridgelabz.fundoo.model.User;
 import com.bridgelabz.fundoo.repository.UserDao;
-import com.bridgelabz.fundoo.repository.UserNotesDao;
 
 @Service
 public class UserServiceImpl implements IUserService {
 
 	@Autowired
 	private UserDao dao;
+	
+	RabbitMessageProvider messageRabbit=new RabbitMessageProvider();
 
 	@Autowired
 	private static PasswordEncoder bcryptPassword = new BCryptPasswordEncoder();
 
-	// private final Log logger = LogFactory.getLog(getClass());
-
-	// private Pattern BCRYPT_PATTERN =
-	// Pattern.compile("\\A\\$2(a|y|b)?\\$(\\d\\d)\\$[./0-9A-Za-z]{53}");
 
 	@Autowired
 	JwtProvider jwtProvider;
@@ -46,14 +44,14 @@ public class UserServiceImpl implements IUserService {
 
 	@Override
 	public boolean register(User user) {
-		List<User> userlist = (List<User>) dao.findAll();
+		List<User> userlist = dao.findAll();
 		boolean status = false;
 		String email = user.getEmail();
 		for (User userList : userlist) {
 			String emailid = userList.getEmail();
 			if (email.compareToIgnoreCase(emailid) == 0) {
 				status = true;
-				// return true;
+				
 				throw new RegisterUnSuccesFullException();
 			}
 		}
@@ -64,6 +62,12 @@ public class UserServiceImpl implements IUserService {
 			String jwtString = jwtProvider.generateToken(email);
 			String Url = "http://localhost:8080/users/verify/";
 			dao.save(user);
+//			messageRabbit.setEmail(user.getEmail());
+//			messageRabbit.setLink(Url);
+//			messageRabbit.setToken(jwtString);		
+//			logger.info(jwtToken.generateToken(model.getUserId()));
+//			JmsProvider.sendRabbit(messageRabbit);
+//			JmsProvider.sendEmail(user.getEmail(),Url, jwtString);
 			JmsProvider.sendEmail(email, "for Authorization", Url + jwtString);
 
 		}
@@ -73,8 +77,8 @@ public class UserServiceImpl implements IUserService {
 	@Override
 	@Transactional
 	public List<User> GetUser() {
-		List<User> userlist = (List<User>) dao.findUsers();
-		if (userlist.size() > 0) {
+		List<User> userlist = dao.findUsers();
+		if (!userlist.isEmpty()) {
 			return userlist;
 		} else {
 			throw new UserNotFoundException();
@@ -106,6 +110,7 @@ public class UserServiceImpl implements IUserService {
 			String pass = user.getPassword();
 			System.out.println(pass);
 			System.out.println(password);
+			
 			if (email.compareToIgnoreCase(emailid) == 0) {
 
 				if (bcryptPassword.matches(password, pass)) {
@@ -161,7 +166,7 @@ public class UserServiceImpl implements IUserService {
 
 	@Override
 	public boolean updatePassword( String token,ResetDto password) {
-		List<User> userlist = (List<User>) dao.findAll();
+		List<User> userlist = dao.findAll();
 		String email=jwtProvider.parseToken(token);
 		for (User user : userlist) {
 			String emailid = user.getEmail();

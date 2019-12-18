@@ -97,9 +97,11 @@ public class UserController {
 		if (status) {
 			return new ResponseEntity<>(new ExceptionResolve(HttpStatus.OK.value(), "you are authorized"),
 					HttpStatus.OK);
-		} else
+		} 
+		else {
 			return new ResponseEntity<>(new ExceptionResolve(HttpStatus.BAD_REQUEST.value(), "you are not authorized"),
 					HttpStatus.OK);
+		}
 
 	}
 
@@ -114,7 +116,7 @@ public class UserController {
 
 	@PostMapping("/users/update-password")
 	public ResponseEntity<ExceptionResolve> updatePassword(@RequestHeader String token, @RequestBody ResetDto resetdto ) {
-		boolean status = iUserService.updatePassword(token,resetdto);
+	iUserService.updatePassword(token,resetdto);
 		return new ResponseEntity<>(new ExceptionResolve(HttpStatus.OK.value(), "password Updated"), HttpStatus.OK);
 
 	}
