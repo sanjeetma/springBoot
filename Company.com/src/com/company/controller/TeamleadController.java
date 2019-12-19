@@ -9,12 +9,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class TeamleadController {
 
 	@ResponseBody
-	@RequestMapping("/teamhead")
+	@RequestMapping("/head")
 	public String show() {
 		return "I am Team Leader and My name is sanjeet";
 	}
 	@ResponseBody
-	@RequestMapping("/teamstatus")
+	@RequestMapping("/status")
 	public String teamDetails() {
 		return "Team is Working fine";
 	}

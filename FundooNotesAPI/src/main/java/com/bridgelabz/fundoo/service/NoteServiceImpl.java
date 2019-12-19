@@ -2,6 +2,7 @@ package com.bridgelabz.fundoo.service;
 
 import java.sql.Date;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,12 +12,12 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.bridgelabz.fundoo.configure.JwtProvider;
 import com.bridgelabz.fundoo.model.Note;
 import com.bridgelabz.fundoo.model.NoteDto;
 import com.bridgelabz.fundoo.model.User;
 import com.bridgelabz.fundoo.repository.UserDao;
 import com.bridgelabz.fundoo.repository.UserNotesDao;
+import com.bridgelabz.fundoo.util.JwtProvider;
 
 @Service
 public class NoteServiceImpl implements INoteService {
@@ -95,9 +96,10 @@ public class NoteServiceImpl implements INoteService {
 		return false;
 	}
 
+	@SuppressWarnings("null")
 	@Override
 	public List<Note> getAllArchieve(String token) {
-		Optional<Note> archeive = null;
+		List<Note> archeive = new ArrayList<Note>();
 		Long id=jwtprovider.verifyToken(token);
 		System.out.println(id);
 		List<Note> noteList=(List<Note>) notesdao.findAllNote((long)id);
@@ -107,7 +109,7 @@ public class NoteServiceImpl implements INoteService {
 				
 				System.out.println("########################################");
 				System.out.println(note.isArchieved());
-				archeive.;	
+				archeive.add(note);	
 				System.out.println(archeive);
 			}
 		}

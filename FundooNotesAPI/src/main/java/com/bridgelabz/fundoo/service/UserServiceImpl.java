@@ -5,14 +5,11 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.bridgelabz.fundoo.configure.JmsProvider;
-import com.bridgelabz.fundoo.configure.JwtProvider;
 import com.bridgelabz.fundoo.exception.RegisterUnSuccesFullException;
 import com.bridgelabz.fundoo.exception.UserNotFoundAtGivenIndex;
 import com.bridgelabz.fundoo.exception.UserNotFoundException;
@@ -20,6 +17,10 @@ import com.bridgelabz.fundoo.model.RabbitMessageProvider;
 import com.bridgelabz.fundoo.model.ResetDto;
 import com.bridgelabz.fundoo.model.User;
 import com.bridgelabz.fundoo.repository.UserDao;
+import com.bridgelabz.fundoo.util.JmsProvider;
+import com.bridgelabz.fundoo.util.JwtProvider;
+
+import ch.qos.logback.classic.Logger;
 
 @Service
 public class UserServiceImpl implements IUserService {
@@ -35,7 +36,9 @@ public class UserServiceImpl implements IUserService {
 
 	@Autowired
 	JwtProvider jwtProvider;
-
+	
+	
+	
 	private String EncryptPassword(String plainTextPassword) {
 
 		return bcryptPassword.encode(plainTextPassword);
@@ -62,13 +65,17 @@ public class UserServiceImpl implements IUserService {
 			String jwtString = jwtProvider.generateToken(email);
 			String Url = "http://localhost:8080/users/verify/";
 			dao.save(user);
-//			messageRabbit.setEmail(user.getEmail());
-//			messageRabbit.setLink(Url);
-//			messageRabbit.setToken(jwtString);		
-//			logger.info(jwtToken.generateToken(model.getUserId()));
-//			JmsProvider.sendRabbit(messageRabbit);
-//			JmsProvider.sendEmail(user.getEmail(),Url, jwtString);
-			JmsProvider.sendEmail(email, "for Authorization", Url + jwtString);
+			messageRabbit.setEmail(user.getEmail());
+			messageRabbit.setLink(Url);
+			messageRabbit.setToken(jwtString);		
+		
+		try {
+			JmsProvider.sendToRabitMq(messageRabbit);
+		} catch (Exception e) {
+			
+			System.out.println("can not send Email");
+		}
+
 
 		}
 		return status;

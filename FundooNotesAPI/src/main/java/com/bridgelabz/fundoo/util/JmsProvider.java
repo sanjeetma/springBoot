@@ -1,4 +1,4 @@
-package com.bridgelabz.fundoo.configure;
+package com.bridgelabz.fundoo.util;
 import java.util.Properties;
 
 import javax.mail.Authenticator;
@@ -65,14 +65,14 @@ public class JmsProvider {
 
 	}
 	}
-//	public static void sendRabbit(RabbitMessageProvider message) {
-//		tempRabbit.convertAndSend("tips_tx","tips",message);
-//	}
-//
-//	@RabbitListener(queues = "default_parser_q")
-//	public void sendToRabitMq(RabbitMessageProvider message) throws Exception{
-//		sendEmail(message.getEmail(), message.getLink(), message.getToken());
-//	}
+	public static void sendRabbit(RabbitMessageProvider message) {
+		tempRabbit.convertAndSend("tips_tx","tips",message);
+	}
+
+	@RabbitListener(queues = "default_parser_q")
+	public static void sendToRabitMq(RabbitMessageProvider message) throws Exception{
+		sendEmail(message.getEmail(), message.getLink(), message.getToken());
+	}
 
 	
 	}

@@ -16,11 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bridgelabz.fundoo.configure.JwtProvider;
 import com.bridgelabz.fundoo.exception.ExceptionResolve;
 import com.bridgelabz.fundoo.model.Note;
 import com.bridgelabz.fundoo.model.NoteDto;
 import com.bridgelabz.fundoo.service.INoteService;
+import com.bridgelabz.fundoo.util.JwtProvider;
 
 @RestController
 @RequestMapping("/")

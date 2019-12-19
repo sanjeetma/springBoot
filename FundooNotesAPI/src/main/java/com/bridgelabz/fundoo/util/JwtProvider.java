@@ -1,4 +1,4 @@
-package com.bridgelabz.fundoo.configure;
+package com.bridgelabz.fundoo.util;
 
 import org.springframework.stereotype.Component;
 
