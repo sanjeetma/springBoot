@@ -1,12 +1,17 @@
 package com.bridgelabz.fundoo.model;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import org.springframework.stereotype.Component;
@@ -56,10 +61,15 @@ public class Note {
 	@Column
 	private LocalDateTime reminderTime;
 	
+	@ManyToMany(targetEntity = LabelModel.class,cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+	@JoinColumn(name="note_id")
+	private List<LabelModel> labels;
+	
 	public Note(NoteDto notedto){
 		this.tittle=notedto.getTitle();
 		this.description=notedto.getDesc();
 	}
+	
 	
 	
 }

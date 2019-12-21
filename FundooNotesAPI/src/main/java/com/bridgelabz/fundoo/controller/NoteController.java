@@ -64,7 +64,7 @@ public class NoteController {
 	}
 	@GetMapping("/notes/archive/{id}")
 	public ResponseEntity<ExceptionResolve>archiveNote(@PathVariable(name="id") Long id){
-		if(noteservice.archived(id)) {;
+		if(noteservice.archived(id)) {
 		return new ResponseEntity<>(
 				new ExceptionResolve(HttpStatus.OK.value(), "note Archeived"), HttpStatus.OK);
 		}

@@ -72,6 +72,11 @@ public class User implements Serializable  {
 	@JoinColumn(name="Id")
 	private List<Note> note;
 
+	
+	@OneToMany(targetEntity=LabelModel.class,cascade=CascadeType.ALL,fetch=FetchType.LAZY)
+	@JoinColumn(name="user_id")
+	private List<LabelModel> label;
+
 	public User(UserDto userdto) {
 		this.email = userdto.getEmail();
 		this.password = userdto.getPassword();

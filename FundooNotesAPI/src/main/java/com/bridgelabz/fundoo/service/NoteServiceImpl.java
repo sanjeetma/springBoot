@@ -41,8 +41,9 @@ public class NoteServiceImpl implements INoteService {
 		System.out.println(id);
 		Optional<User> userModel = userdao.findById(id);
 
-		Note noteModel = modelmapper.map(note, Note.class);
-		userModel.get().getNote().add(noteModel);
+		//Note noteModel = modelmapper.map(note, Note.class);
+		userModel.get().getNote().add(note);
+		
 		note.setCreatedtime(LocalDateTime.now());
 
 		notesdao.save(note);
@@ -65,16 +66,29 @@ public class NoteServiceImpl implements INoteService {
 	@Override
 	@Transactional
 	public List<Note> allNotes() {
+		List<Note> alllist=new ArrayList<Note>();
 		List<Note> noteList=notesdao.findAll();
-		return noteList;
+		for(Note note:noteList) {
+			if(!note.isArchieved()) {
+				alllist.add(note);
+			}
+		}
+		return alllist;
 	}
 	
 	
 	@Transactional
 	public List<Note> allNotesi(String token) {
+		List<Note> alllist=new ArrayList<Note>();
 		Long id=jwtprovider.verifyToken(token);
 		List<Note> noteList=(List<Note>) notesdao.findAllNote((long)id);
-		return noteList;
+		for(Note note:noteList) {
+			if(!note.isArchieved()) {
+				alllist.add(note);
+			}
+		}
+		return alllist;
+		
 	}
 	
 	public boolean archived(long id) {
